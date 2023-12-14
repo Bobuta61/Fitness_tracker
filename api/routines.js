@@ -8,11 +8,21 @@ const { requireUser, requiredNotSent } = require('./utils')
 // GET /api/routines
 router.get('/', async (req, res, next) => {
   try {
-    // TODO - send back all data, including private, if token present. This would mean adding only the data for the user that matches the request
+    // TODO - send back all data, including private, if token present. 
+    // This would mean adding only the data for the user that matches the request
     const routines = await getAllPublicRoutines();
     res.send(routines);
   } catch (error) {
     next(error)
+  }
+})
+
+router.get('/:routinesId', async (req, res, next) => {
+  try {
+    const routine = await getRoutineById(req.params.routinesId)
+    res.send(routine)
+  } catch (error) {
+    next(error);
   }
 })
 

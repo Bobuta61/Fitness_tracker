@@ -1,10 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { updateRoutineActivity, canEditRoutineActivity, destroyRoutineActivity, getRoutineActivityById } = require('../db');
+const { updateRoutineActivity, canEditRoutineActivity, destroyRoutineActivity, getRoutineActivityById, getAllRoutineActivities } = require('../db');
 const client = require('../db/client');
 const { requireUser, requiredNotSent } = require('./utils')
 
-
+router.get("/", async (req, res, next) => {
+  try {
+    const routineActivities = await getAllRoutineActivities();
+    res.send(routineActivities);
+  } catch (err) {
+    next(err);
+  }
+})
 
 // PATCH /api/routine_activities/:routineActivityId
 router.patch('/:routineActivityId', requireUser, requiredNotSent({requiredParams: ['count', 'duration'], atLeastOne: true}), async (req, res, next) => {
